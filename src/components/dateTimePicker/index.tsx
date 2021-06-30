@@ -1,4 +1,3 @@
-import { IonContent, IonIcon } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import ConfirmCard from './confirmCard';
@@ -12,32 +11,36 @@ const DateTimePicker: React.FC = () => {
 	const [hours, setHours] = useState<String>();
 	const [day, setDay] = useState<String>();
 
-	const reservedHoursState = useSelector((state: any) => state.reservedHours);
+	const reservedHoursStore = useSelector((state: any) => state.reservedHours);
 	const selectedPsychologist = useSelector((state: any) => state.selectedPsychologist.id);
 
-	let reservedHours = reservedHoursState.map(
-		(item: any) => (item.psychologistsId === selectedPsychologist ? item : null) //Reserved hour with selected psychologist
+	const [reservedHours, setReservedHours] = useState(
+		reservedHoursStore.map((item: any) => (item.psychologistsId === selectedPsychologist ? item : null))
 	);
-	reservedHours = reservedHours.filter((e: any) => e !== null); //Array cleaning
 
 	useEffect(() => {
-		let reservedDate = new Date(
-			reservedHours[reservedHours.length - 1]?.timestamp
-				? reservedHours[reservedHours.length - 1]?.timestamp
-				: new Date().getTime()
+		setReservedHours(
+			reservedHoursStore
+				.map((item: any) => (item.psychologistsId === selectedPsychologist ? item : null))
+				.filter((e: any) => e !== null)
 		);
-		console.log(reservedDate);
-		let hour = reservedDate.getHours();
-		setDay(reservedDate.getDate() + ' ' + reservedDate.getMonth());
-		setHours(hour.toString().length > 1 ? hour + ':00' : '0' + hour + ':00');
-	}, [reservedHoursState]); //Set default date from redux
+	}, [selectedPsychologist]); //Re-render default date and time if psychologist changed
+
+	useEffect(() => {
+		if (reservedHours.length > 0) {
+			let reservedDate = new Date(reservedHours[0]?.timestamp);
+			let hour = reservedDate.getHours();
+			setDay(reservedDate.getDate() + ' ' + reservedDate.getMonth());
+			setHours(hour.toString().length > 1 ? hour + ':00' : '0' + hour + ':00');
+		}
+	}, [reservedHours]); //Set default date and time
 
 	return (
 		<>
 			<p className="dateHeader">Возможная дата </p>
-			<DaySlider selectDate={selectedDate} setDay={setDay}></DaySlider>
+			<DaySlider selectedDate={selectedDate} setDay={setDay}></DaySlider>
 			<p className="dateHeader">Свободное время </p>
-			<TimeSlider selectDate={selectedDate} setHours={setHours}></TimeSlider>
+			<TimeSlider selectedDate={selectedDate} setHours={setHours}></TimeSlider>
 			<ConfirmCard selectedDate={selectedDate} day={day} hours={hours}></ConfirmCard>
 		</>
 	);

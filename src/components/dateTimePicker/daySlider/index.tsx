@@ -1,5 +1,4 @@
 import { IonCard, IonCardSubtitle, IonSlide, IonSlides } from '@ionic/react';
-import { useState } from 'react';
 import './daySlider.css';
 
 const slideOpts = {
@@ -11,25 +10,22 @@ const slideOpts = {
 
 const dayOfWeek = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
 
-const DaySlider = ({ selectDate, setDay }: any) => {
-	const [selectedDay, selectDay] = useState<Number>();
+const DaySlider = ({ selectedDate, setDay }: any) => {
 	return (
 		<IonSlides pager={false} options={slideOpts}>
 			{Array.from(Array(7).keys()).map((item) => {
-				//Create 7 card of day
-				let now = new Date();
-				now.setDate(now.getDate() + item); //Each card has its time
+				/*Create 7 card of day */
+				let cardDate = new Date();
+				cardDate.setDate(cardDate.getDate() + item); //Each card has its time
 				return (
 					<IonSlide key={item}>
 						<DayCard
-							now={now}
-							selectDate={selectDate}
-							day={now.getDate()}
+							cardDate={cardDate}
+							day={cardDate.getDate()}
 							isToday={item === 0}
-							dayOfWeek={dayOfWeek[now.getDay()]}
-							selectedDay={selectedDay}
-							selectDay={selectDay}
+							dayOfWeek={dayOfWeek[cardDate.getDay()]}
 							setDay={setDay}
+							selectedDate={selectedDate}
 						></DayCard>
 					</IonSlide>
 				);
@@ -38,29 +34,32 @@ const DaySlider = ({ selectDate, setDay }: any) => {
 	);
 };
 
-const DayCard = ({ day, isToday, dayOfWeek, selectedDay, selectDay, now, selectDate, setDay }: any) => {
+const DayCard = ({ day, isToday, dayOfWeek, selectedDate, cardDate, setDay }: any) => {
 	return (
 		<IonCard
 			onClick={
 				dayOfWeek === 'Вс' || dayOfWeek === 'Сб'
 					? () => {}
 					: () => {
-							selectDay(day);
-							selectDate.setDate(now.getDate());
-							selectDate.setMonth(now.getMonth());
-							setDay(selectDate.getDate() + ' ' + selectDate.getMonth());
+							selectedDate.setDate(cardDate.getDate());
+							selectedDate.setMonth(cardDate.getMonth());
+							setDay(selectedDate.getDate() + ' ' + selectedDate.getMonth()); //Set selected date
 					  }
 			} // Don't select if Weekends
 			className={
-				(selectedDay === day ? 'dayCardSelected' : 'dayCard') +
-				(dayOfWeek === 'Вс' || dayOfWeek === 'Сб' ? ' disabledDay' : '')
+				(selectedDate.getDate() === cardDate.getDate() ? 'dayCardSelected' : 'dayCard') +
+				(dayOfWeek === 'Вс' || dayOfWeek === 'Сб' ? ' disabledDay' : '') //Gray cards background for the weekends
 			}
 		>
 			<IonCardSubtitle>
-				<p className={selectedDay === day ? 'selectedDay' : 'day'}>{isToday ? 'Сегодня' : dayOfWeek}</p>
+				<p className={selectedDate.getDate() === cardDate.getDate() ? 'selectedDay' : 'day'}>
+					{isToday ? 'Сегодня' : dayOfWeek}
+				</p>
 			</IonCardSubtitle>
 			<IonCardSubtitle>
-				<p className={selectedDay === day ? 'selectedDayNumber' : 'dayNumber'}>{day}</p>
+				<p className={selectedDate.getDate() === cardDate.getDate() ? 'selectedDayNumber' : 'dayNumber'}>
+					{day}
+				</p>
 			</IonCardSubtitle>
 		</IonCard>
 	);

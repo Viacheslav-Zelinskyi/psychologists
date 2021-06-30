@@ -1,5 +1,4 @@
 import { IonCard, IonCardSubtitle, IonSlide, IonSlides } from '@ionic/react';
-import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import './timeSlider.css';
 
@@ -10,11 +9,9 @@ const slideOpts = {
 	spaceBetween: 0,
 };
 
-const DaySlider = ({ selectDate, setHours }: any) => {
+const TimeSlider = ({ selectedDate, setHours }: any) => {
 	const reservedHours = useSelector((state: any) => state.reservedHours);
 	const psychologistId = useSelector((state: any) => state.selectedPsychologist.id);
-
-	const [selectedHour, selectHour] = useState(0);
 
 	let disabledHour = reservedHours.map(
 		(item: any) => (item.psychologistsId === psychologistId ? item.timestamp : null) //Get reserved hour
@@ -26,8 +23,8 @@ const DaySlider = ({ selectDate, setHours }: any) => {
 				.slice(8)
 				.map((item) => {
 					const cardDate = new Date();
-					cardDate.setDate(selectDate.getDate());
-					cardDate.setMonth(selectDate.getMonth());
+					cardDate.setDate(selectedDate.getDate());
+					cardDate.setMonth(selectedDate.getMonth());
 					cardDate.setHours(item);
 					cardDate.setMinutes(0);
 					cardDate.setSeconds(0);
@@ -40,10 +37,7 @@ const DaySlider = ({ selectDate, setHours }: any) => {
 								}
 								hour={item}
 								setHours={setHours}
-								selectDate={selectDate}
-								selectedHour={selectedHour}
-								selectHour={selectHour}
-								disabledHour={disabledHour}
+								selectedDate={selectedDate}
 							></TimeCard>
 						</IonSlide>
 					);
@@ -52,21 +46,20 @@ const DaySlider = ({ selectDate, setHours }: any) => {
 	);
 };
 
-const TimeCard = ({ hour, selectedHour, selectHour, selectDate, setHours, disabledClassName }: any) => {
+const TimeCard = ({ hour, selectedDate, setHours, disabledClassName }: any) => {
 	return (
 		<IonCard
 			onClick={() => {
-				selectHour(hour);
-				selectDate.setHours(hour);
-				selectDate.setMinutes(0);
-				selectDate.setSeconds(0);
-				selectDate.setMilliseconds(0);
+				selectedDate.setHours(hour);
+				selectedDate.setMinutes(0);
+				selectedDate.setSeconds(0);
+				selectedDate.setMilliseconds(0);
 				setHours(hour.toString().length > 1 ? hour + ':00' : '0' + hour + ':00');
 			}}
 			className="timeCard"
 		>
 			<IonCardSubtitle>
-				<p style={disabledClassName} className={hour === selectedHour ? 'selectedHour' : 'hour'}>
+				<p style={disabledClassName} className={hour === selectedDate.getHours() ? 'selectedHour' : 'hour'}>
 					{hour.toString().length > 1 ? hour + ':00' : '0' + hour + ':00'}
 				</p>
 			</IonCardSubtitle>
@@ -74,4 +67,4 @@ const TimeCard = ({ hour, selectedHour, selectHour, selectDate, setHours, disabl
 	);
 };
 
-export default DaySlider;
+export default TimeSlider;
