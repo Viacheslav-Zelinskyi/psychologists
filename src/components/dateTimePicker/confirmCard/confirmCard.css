@@ -1,0 +1,32 @@
+.confirmCardContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 25px;
+}
+.selectedDate {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+
+.selectResult {
+    font-size: 24px;
+    font-weight:normal;
+    margin-top: 10px;
+}
+
+.selectResultValue {
+    margin-top: 15px;
+    font-size: 30px;
+    color: rgb(56, 56, 56);
+    font-weight: 400;
+}
+
+.confirmButton{
+    margin-top: -10px;
+    width: 325px;
+    height: 50px;
+    margin-bottom: 20px;
+}

@@ -1,0 +1,42 @@
+ion-card {
+	margin-left: 25px;
+	margin-right: 25px;
+}
+
+ion-img {
+	width: 100px;
+    height: 100px;
+}
+
+.cardSubtitle {
+	font-size: 18px;
+	color: black;
+	font-weight: bold;
+}
+
+ion-grid {
+	display: flex;
+	justify-content: center;
+    align-items: center;
+    padding-bottom: 25px;
+}
+
+ion-card-content {
+	width: 150px;
+}
+
+.duration {
+	font-size: 16px;
+	margin-bottom: 5px;
+}
+
+.durationNumber {
+    color: black;
+    font-weight: bold;
+}
+
+.durationContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

@@ -18,23 +18,44 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
-
-/* Theme variables */
 import './theme/variables.css';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPsychologists, getReservedHours } from './api';
+import { addPsychologists } from './redux/reducers/psychologists';
+import { addReservedHours } from './redux/reducers/reservedHours';
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/home">
-          <Home />
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/home" />
-        </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+const App: React.FC = () => {
+	const [psychologistsState, setPsychologistsState] = useState([]);
+	const [reservedHours, setReservedHours] = useState([]);
+
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		getPsychologists(setPsychologistsState);
+		getReservedHours(setReservedHours);
+	}, []);
+	useEffect(() => {
+		psychologistsState.map((item) => dispatch(addPsychologists(item)));
+	}, [psychologistsState]);
+	useEffect(() => {
+		reservedHours.map((item) => dispatch(addReservedHours(item)));
+	}, [reservedHours]);
+
+	return (
+		<IonApp>
+			<IonReactRouter>
+				<IonRouterOutlet>
+					<Route exact path="/home">
+						<Home />
+					</Route>
+					<Route exact path="/">
+						<Redirect to="/home" />
+					</Route>
+				</IonRouterOutlet>
+			</IonReactRouter>
+		</IonApp>
+	);
+};
 
 export default App;

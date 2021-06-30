@@ -1,0 +1,31 @@
+.disabledDay{
+    background-color: rgb(219, 219, 219);
+}
+.dayCard {
+	width: 100px;
+	height: 100px;
+	font-size: 16px;
+}
+.dayCardSelected {
+	width: 100px;
+	height: 100px;
+	border: 2px solid rgb(72, 168, 209);
+}
+.day {
+	font-size: 18px;
+}
+
+.selectedDay {
+	color: rgb(72, 168, 209);
+	font-size: 18px;
+}
+.dayNumber {
+	margin-top: -10px;
+	font-size: 30px;
+}
+
+.selectedDayNumber {
+    margin-top: -10px;
+	color: rgb(72, 168, 209);
+	font-size: 30px;
+}
